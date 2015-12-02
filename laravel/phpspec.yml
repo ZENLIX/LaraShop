@@ -1,0 +1,5 @@
+suites:
+    main:
+        namespace: larashop
+        psr4_prefix: larashop
+        src_path: app
