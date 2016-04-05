@@ -77,7 +77,19 @@ class SearchController extends Controller
             
             if (!in_array($topprod->product_id, ['fast', 'np', 'gift'])) {
                 
-                $prodName = Products::findOrFail($topprod->product_id);
+                    if (strpos($topprod->product_id, '0000') ) {
+                        //dd('consist');
+                        $pID=explode('0000', $topprod->product_id);
+                        //$topprod->product_id = $pID[0];
+                        $prodID=$pID[0];
+
+                    }
+                    else {
+                        $prodID = $topprod->product_id;
+                    }
+
+                    
+                $prodName = Products::findOrFail($prodID);
                 
                 //echo $prodName->name;
                 

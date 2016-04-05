@@ -156,12 +156,28 @@ $('body').on('click', 'a#pay', function(event) {
 
 //var data = $(this).sortable('serialize');
 //var data_res = data + '&' + $.param(def_data);
-console.log(data);
+//console.log(data);
         // POST to server using $.post or $.ajax
-var data={ _token : CSRF_TOKEN,
-        _method: 'PATCH'
-};
+
 var product=$(this).attr('data-id');
+
+
+
+
+if ( $( "#optSelUI" ).length ) {
+    var opt=$("#optSelUI").find(':selected').attr('value');
+    //console.log(opt);
+    }
+    else {
+    var opt='Null';
+    }
+
+var data={ _token : CSRF_TOKEN,
+        _method: 'PATCH',
+        opt: opt
+};
+
+
                                 $.ajax({
                                     type: 'POST',
                                     url: SYS_URL+'/basket/add/'+product,

@@ -12,6 +12,8 @@ use larashop\Clients;
 use larashop\Purchase;
 use larashop\OrderItems;
 use larashop\OrderFiles;
+use larashop\Options;
+use larashop\Products;
 
 use Validator;
 use Mail;
@@ -283,14 +285,34 @@ class PurchaseController extends Controller
                     $totalSumm = $totalSumm + (Setting::get('product.gift') * $value->qty);
                 } 
                 else {
+
+//!strpos($a, 'are')
+                    if (strpos($value->product_id, '0000') ) {
+                        //dd('consist');
+                        $pID=explode('0000', $value->product_id);
+                        $option=Options::findOrFail($pID[1]);
+                        $product=Products::findOrFail($pID[0]);
+                        $productPrice= $option->price;
+                        $value->productPrice = $productPrice;
+                        $value->productName = $product->name . ' (' . $option->name . ')' ;
+
+                    }
+                    else {
+                        $productPrice = $value->product->price;
+                        $value->productPrice = $value->product->price;
+                        $value->productName = $value->product->name;
+                    }
                     
+                    
+
+
                     //echo   $value->qty."__";
-                    $totalSumm = $totalSumm + ($value->product->price * $value->qty);
+                    $totalSumm = $totalSumm + ($productPrice * $value->qty);
                 }
             }
             (Setting::get('config.logo', Null)) ? $logoMain = asset('/files/img/' . Setting::get('config.logo')) : $logoMain = asset('dist/img/logo.png');
             
-            $data = ['orderCode' => $orderCode, 'client' => $client, 'delivery_type' => $delivery_type, 'order' => $order, 'pay_type' => $pay_type, 'orderItems' => $orderItems, 'totalCount' => $totalCount, 'totalSumm' => $totalSumm, 'PageDescr' => Setting::get('config.maindesc') , 'PageWords' => Setting::get('config.mainwords') , 'PageAuthor' => '', 'PageTitle' => Setting::get('config.maintitle') , 'logoMain' => $logoMain, 'totalNavLabel' => $this->totalNavLabel() , ];
+            $data = ['orderCode' => $orderCode, 'client' => $client, 'delivery_type' => $delivery_type, 'order' => $order, 'pay_type' => $pay_type, 'orderItems' => $orderItems, 'totalCount' => $totalCount, 'totalSumm' => $totalSumm, 'PageDescr' => Setting::get('config.maindesc') , 'PageWords' => Setting::get('config.mainwords') , 'PageAuthor' => '', 'PageTitle' => Setting::get('config.maintitle') , 'logoMain' => $logoMain, 'totalNavLabel' => $this->totalNavLabel() , 'appURL'=>config('app.url') ];
             
             //dd($orderItems->toarray());
             /*

@@ -9,6 +9,7 @@ use larashop\Http\Controllers\Controller;
 use larashop\Clients;
 use larashop\Purchase;
 use larashop\Products;
+use larashop\Options;
 
 use larashop\OrderItems;
 use Auth;
@@ -75,8 +76,32 @@ class DashboardController extends Controller
                     $ordertotalSumm = $ordertotalSumm + ((Setting::get('product.gift')) * $item->qty);
                 } 
                 else {
+
+
+                    if (strpos($item->product_id, '0000') ) {
+                        //dd('consist');
+                        $pID=explode('0000', $item->product_id);
+                        $option=Options::findOrFail($pID[1]);
+                        $product=Products::findOrFail($pID[0]);
+                        $productPrice= $option->price;
+                        $item->productPrice = $productPrice;
+                        $item->productName = $product->name . ' (' . $option->name . ')' ;
+                        $item->productCover = $product->cover;
+                        $item->productUrlhash = $product->urlhash;
+
+                    }
+                    else {
+                        $productPrice = $item->product->price;
+                        $item->productPrice = $item->product->price;
+                        $item->productName = $item->product->name;
+                        $item->productCover = $item->product->cover;
+                        $item->productUrlhash = $item->product->urlhash;
+                    }
+
+
+
                     $ordertotalCount = $ordertotalCount + $item->qty;
-                    $ordertotalSumm = $ordertotalSumm + ($item->product->price * $item->qty);
+                    $ordertotalSumm = $ordertotalSumm + ($item->productPrice * $item->qty);
                 }
             }
             
@@ -107,8 +132,30 @@ class DashboardController extends Controller
                     $totalSumm = $totalSumm + ((Setting::get('product.gift')) * $item->qty);
                 } 
                 else {
+
+                    if (strpos($item->product_id, '0000') ) {
+                        //dd('consist');
+                        $pID=explode('0000', $item->product_id);
+                        $option=Options::findOrFail($pID[1]);
+                        $product=Products::findOrFail($pID[0]);
+                        $productPrice= $option->price;
+                        $item->productPrice = $productPrice;
+                        $item->productName = $product->name . ' (' . $option->name . ')' ;
+                        $item->productCover = $product->cover;
+                        $item->productUrlhash = $product->urlhash;
+
+                    }
+                    else {
+                        $productPrice = $item->product->price;
+                        $item->productPrice = $item->product->price;
+                        $item->productName = $item->product->name;
+                        $item->productCover = $item->product->cover;
+                        $item->productUrlhash = $item->product->urlhash;
+                    }
+
+
                     $totalCount = $totalCount + $item->qty;
-                    $totalSumm = $totalSumm + ($item->product->price * $item->qty);
+                    $totalSumm = $totalSumm + ($item->productPrice * $item->qty);
                 }
             }
         }
@@ -125,7 +172,21 @@ class DashboardController extends Controller
         foreach ($topProds as $topprod) {
             
             if (!in_array($topprod->product_id, ['fast', 'np', 'gift'])) {
-                $prodName = Products::findOrFail($topprod->product_id);
+
+
+                    if (strpos($topprod->product_id, '0000') ) {
+                        //dd('consist');
+                        $pID=explode('0000', $topprod->product_id);
+                        //$topprod->product_id = $pID[0];
+                        $prodID=$pID[0];
+
+                    }
+                    else {
+                        $prodID = $topprod->product_id;
+                    }
+
+
+                $prodName = Products::findOrFail($prodID );
                 
                 //echo $prodName->name;
                 

@@ -158,18 +158,42 @@
                                                         <td style=" vertical-align: inherit; "><center><small>{!! Setting::get('product.fast') !!}</small></center></td>
                                                     </tr>
                                                     @else
+
+
+<?php
+                    if (strpos($row->product_id, '0000') ) {
+                        //dd('consist');
+                        $pID=explode('0000', $row->product_id);
+                        $option=larashop\Options::findOrFail($pID[1]);
+                        $product=larashop\Products::findOrFail($pID[0]);
+                        $productPrice= $option->price;
+                        $row->productPrice = $productPrice;
+                        $row->productName = $product->name . ' (' . $option->name . ')' ;
+                        $row->productCover = $product->cover;
+                        $row->productUrlhash = $product->urlhash;
+
+                    }
+                    else {
+                        $productPrice = $row->product->price;
+                        $row->productPrice = $row->product->price;
+                        $row->productName = $row->product->name;
+                        $row->productCover = $row->product->cover;
+                        $row->productUrlhash = $row->product->urlhash;
+                    }
+?>
+
                                                     <tr>
 
                                                         <td style=" vertical-align: inherit; "><small><center>{{$i}}</center></small></td>
                                                         <td style=" vertical-align: inherit; ">
                                                             <center>
-                                                            <img style=" max-height: 50px;" src="{{ asset('files/products/img/small/'.$row->product->cover) }}" alt="4" class="img-responsive"> </center>
+                                                            <img style=" max-height: 50px;" src="{{ asset('files/products/img/small/'.$row->productCover) }}" alt="4" class="img-responsive"> </center>
                                                         </td>
                                                         <td style=" vertical-align: inherit; ">
 
-                                                        {{$row->product->name}}</td>
+                                                        {{$row->productName}}</td>
                                                         <td style=" vertical-align: inherit; "><small><center>{{$row->qty}}</center></small></td>
-                                                        <td style=" vertical-align: inherit; "><small><center>{!! ($row->product->price*$row->qty) !!}</center></small></td>
+                                                        <td style=" vertical-align: inherit; "><small><center>{!! ($row->productPrice*$row->qty) !!}</center></small></td>
 
                                                     </tr>
                                                     @endif

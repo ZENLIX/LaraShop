@@ -146,9 +146,9 @@
                                                 <tr>
 
                                                     <td style=" vertical-align: inherit; "><small><center>{{$i}}</center></small></td>
-                                                    <td style=" vertical-align: inherit; "><small>{{$row->product->name}}</small></td>
+                                                    <td style=" vertical-align: inherit; "><small>{{$row->productName}}</small></td>
                                                     <td style=" vertical-align: inherit; "><small><center>{{$row->qty}}</center></small></td>
-                                                    <td style=" vertical-align: inherit; "><small><center>{!! ($row->product->price*$row->qty) !!}</center></small></td>
+                                                    <td style=" vertical-align: inherit; "><small><center>{!! ($row->productPrice*$row->qty) !!}</center></small></td>
 
                                                 </tr>
                                                 @endif

@@ -9,6 +9,7 @@ use larashop\Purchase;
 use larashop\OrderItems;
 use larashop\Clients;
 use larashop\Products;
+use larashop\Options;
 use Setting;
 use Validator;
 use File;
@@ -68,8 +69,28 @@ class OrdersController extends Controller
                     $totalSumm = $totalSumm + ((Setting::get('product.gift')) * $item->qty);
                 } 
                 else {
+
+
+                    if (strpos($item->product_id, '0000') ) {
+                        //dd('consist');
+                        $pID=explode('0000', $item->product_id);
+                        $option=Options::findOrFail($pID[1]);
+                        $product=Products::findOrFail($pID[0]);
+                        $productPrice= $option->price;
+                        $item->productPrice = $productPrice;
+                        $item->productName = $product->name . ' (' . $option->name . ')' ;
+
+                    }
+                    else {
+                        $productPrice = $item->product->price;
+                        $item->productPrice = $item->product->price;
+                        $item->productName = $item->product->name;
+                    }
+
+
+
                     $totalCount = $totalCount + $item->qty;
-                    $totalSumm = $totalSumm + ($item->product->price * $item->qty);
+                    $totalSumm = $totalSumm + ($productPrice * $item->qty);
                 }
             }
             $order->itemFast = $itemFast;
@@ -131,9 +152,21 @@ class OrdersController extends Controller
         else {
             
             $item = new OrderItems;
-            $item->order_id = $id;
+
+            if ($request->options != '0') {
+
+            $item->product_id = $request->item . '0000' . $request->options;
+            
+            }
+            else {
             $item->product_id = $request->item;
+
+            }
+            $item->order_id = $id;
             $item->qty = $request->qty;
+
+
+
             $item->save();
             
             $request->session()->flash('alert-success', 'Заказ отредактирован!');
@@ -210,8 +243,32 @@ class OrdersController extends Controller
                 $totalSumm = $totalSumm + ((Setting::get('product.gift')) * $item->qty);
             } 
             else {
+
+
+                    if (strpos($item->product_id, '0000') ) {
+                        //dd('consist');
+                        $pID=explode('0000', $item->product_id);
+                        $option=Options::findOrFail($pID[1]);
+                        $product=Products::findOrFail($pID[0]);
+                        $productPrice= $option->price;
+                        $item->productPrice = $productPrice;
+                        $item->productName = $product->name . ' (' . $option->name . ')' ;
+                        $item->productCover = $product->cover;
+                        $item->productUrlhash = $product->urlhash;
+
+                    }
+                    else {
+                        $productPrice = $item->product->price;
+                        $item->productPrice = $item->product->price;
+                        $item->productName = $item->product->name;
+                        $item->productCover = $item->product->cover;
+                        $item->productUrlhash = $item->product->urlhash;
+                    }
+
+
+
                 $totalCount = $totalCount + $item->qty;
-                $totalSumm = $totalSumm + ($item->product->price * $item->qty);
+                $totalSumm = $totalSumm + ($item->productPrice * $item->qty);
             }
         }
         
@@ -274,8 +331,33 @@ class OrdersController extends Controller
                 $totalSumm = $totalSumm + ((Setting::get('product.gift')) * $item->qty);
             } 
             else {
+
+
+
+                    if (strpos($item->product_id, '0000') ) {
+                        //dd('consist');
+                        $pID=explode('0000', $item->product_id);
+                        $option=Options::findOrFail($pID[1]);
+                        $product=Products::findOrFail($pID[0]);
+                        $productPrice= $option->price;
+                        $item->productPrice = $productPrice;
+                        $item->productName = $product->name . ' (' . $option->name . ')' ;
+                        $item->productCover = $product->cover;
+                        $item->productUrlhash = $product->urlhash;
+
+                    }
+                    else {
+                        $productPrice = $item->product->price;
+                        $item->productPrice = $item->product->price;
+                        $item->productName = $item->product->name;
+                        $item->productCover = $item->product->cover;
+                        $item->productUrlhash = $item->product->urlhash;
+                    }
+
+
+
                 $totalCount = $totalCount + $item->qty;
-                $totalSumm = $totalSumm + ($item->product->price * $item->qty);
+                $totalSumm = $totalSumm + ($item->productPrice * $item->qty);
             }
         }
         
@@ -317,8 +399,18 @@ class OrdersController extends Controller
         foreach ($prods as $key => $value) {
             $prods_arr[$value->id] = $value->name;
         }
+
+        $options = Options::all();
+        $opt_arr = [];
+        $opt_arr[0] = 'Нет';
+        foreach ($options as $key => $value) {
+            $opt_arr[$value->id] = $value->name;
+        }
+
         
-        $data = ['order' => $order, 'totalCount' => $totalCount, 'totalSumm' => $totalSumm, 'dNP' => $dNP, 'dADR' => $dADR, 'Prods' => $prods_arr, 'privat24' => $privat24, 'privat_terminal' => $privat_terminal, 'liqpay' => $liqpay, 'NewOrderCounter' => Purchase::Neworders()->count() ];
+        $data = [
+        'Options'=>$opt_arr,
+        'order' => $order, 'totalCount' => $totalCount, 'totalSumm' => $totalSumm, 'dNP' => $dNP, 'dADR' => $dADR, 'Prods' => $prods_arr, 'privat24' => $privat24, 'privat_terminal' => $privat_terminal, 'liqpay' => $liqpay, 'NewOrderCounter' => Purchase::Neworders()->count() ];
         return view('admin.orderEdit')->with($data);;
     }
     
@@ -346,8 +438,30 @@ class OrdersController extends Controller
                 $totalSumm = $totalSumm + ((Setting::get('product.gift')) * $item->qty);
             } 
             else {
+
+                    if (strpos($item->product_id, '0000') ) {
+                        //dd('consist');
+                        $pID=explode('0000', $item->product_id);
+                        $option=Options::findOrFail($pID[1]);
+                        $product=Products::findOrFail($pID[0]);
+                        $productPrice= $option->price;
+                        $item->productPrice = $productPrice;
+                        $item->productName = $product->name . ' (' . $option->name . ')' ;
+                        $item->productCover = $product->cover;
+                        $item->productUrlhash = $product->urlhash;
+
+                    }
+                    else {
+                        $productPrice = $item->product->price;
+                        $item->productPrice = $item->product->price;
+                        $item->productName = $item->product->name;
+                        $item->productCover = $item->product->cover;
+                        $item->productUrlhash = $item->product->urlhash;
+                    }
+
+
                 $totalCount = $totalCount + $item->qty;
-                $totalSumm = $totalSumm + ($item->product->price * $item->qty);
+                $totalSumm = $totalSumm + ($item->productPrice * $item->qty);
             }
         }
         
@@ -476,7 +590,7 @@ class OrdersController extends Controller
         $client = $order->client;
         (Setting::get('config.logo', Null)) ? $logoMain = asset('/files/img/' . Setting::get('config.logo')) : $logoMain = asset('dist/img/logo.png');
         
-        $data = ['orderCode' => $order->code, 'logoMain' => $logoMain];
+        $data = ['orderCode' => $order->code, 'logoMain' => $logoMain, 'appURL'=>config('app.url')];
         Mail::queue('mail.new', $data, function ($message) use ($client) {
             $message->from(Setting::get('config.email') , Setting::get('config.sitename'));
             $message->subject(Setting::get('config.sitename') . ' - ОЖИДАЕМ ОПЛАТЫ');
@@ -494,7 +608,7 @@ class OrdersController extends Controller
         $order->save();
         (Setting::get('config.logo', Null)) ? $logoMain = asset('/files/img/' . Setting::get('config.logo')) : $logoMain = asset('dist/img/logo.png');
         $client = $order->client;
-        $data = ['orderCode' => $order->code, 'logoMain' => $logoMain];
+        $data = ['orderCode' => $order->code, 'logoMain' => $logoMain, 'appURL'=>config('app.url')];
         Mail::queue('mail.paid', $data, function ($message) use ($client) {
             $message->from(Setting::get('config.email') , Setting::get('config.sitename'));
             $message->subject(Setting::get('config.sitename') . ' - ОПЛАТА ПРИНЯТА');
@@ -514,7 +628,7 @@ class OrdersController extends Controller
         (Setting::get('config.logo', Null)) ? $logoMain = asset('/files/img/' . Setting::get('config.logo')) : $logoMain = asset('dist/img/logo.png');
         
         $client = $order->client;
-        $data = ['order' => $order, 'orderCode' => $order->code, 'logoMain' => $logoMain];
+        $data = ['order' => $order, 'orderCode' => $order->code, 'logoMain' => $logoMain, 'appURL'=>config('app.url')];
         Mail::queue('mail.sent', $data, function ($message) use ($client) {
             $message->from(Setting::get('config.email') , Setting::get('config.sitename'));
             $message->subject(Setting::get('config.sitename') . ' - ЗАКАЗ ОТПРАВЛЕН');
@@ -594,8 +708,31 @@ class OrdersController extends Controller
                 $totalSumm = $totalSumm + ((Setting::get('product.gift')) * $item->qty);
             } 
             else {
+
+
+                    if (strpos($item->product_id, '0000') ) {
+                        //dd('consist');
+                        $pID=explode('0000', $item->product_id);
+                        $option=Options::findOrFail($pID[1]);
+                        $product=Products::findOrFail($pID[0]);
+                        $productPrice= $option->price;
+                        $item->productPrice = $productPrice;
+                        $item->productName = $product->name . ' (' . $option->name . ')' ;
+                        $item->productCover = $product->cover;
+                        $item->productUrlhash = $product->urlhash;
+
+                    }
+                    else {
+                        $productPrice = $item->product->price;
+                        $item->productPrice = $item->product->price;
+                        $item->productName = $item->product->name;
+                        $item->productCover = $item->product->cover;
+                        $item->productUrlhash = $item->product->urlhash;
+                    }
+
+
                 $totalCount = $totalCount + $item->qty;
-                $totalSumm = $totalSumm + ($item->product->price * $item->qty);
+                $totalSumm = $totalSumm + ($item->productPrice * $item->qty);
             }
         }
         

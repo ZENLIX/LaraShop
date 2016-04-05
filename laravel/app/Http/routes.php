@@ -99,6 +99,19 @@ Route::group(['middleware' => 'auth'], function () {
         $request->session()->flash('alert-success', 'Продукт успешно удалён!');
         return redirect('content/prod');
     });
+
+
+ 
+    Route::get('content/options', ['uses' => 'ContentController@indexOptions']);
+    Route::get('content/options/add', ['uses' => 'ContentController@createOptions']);
+    Route::patch('content/options/add', ['uses' => 'ContentController@storeOptions']);
+    Route::get('content/options/edit/{id}', ['uses' => 'ContentController@editOptions']);    
+    Route::post('content/options/edit/{id}', ['uses' => 'ContentController@updateOptions']);    
+    Route::delete('content/options/delete/{id}', ['uses' => 'ContentController@destroyOptions']);
+
+
+
+
     Route::get('content/gallery', ['uses' => 'ContentController@indexGallery']);
     Route::patch('content/gallery/add', ['uses' => 'ContentController@storeImage']);
     Route::delete('content/gallery/delete/{id}', ['uses' => 'ContentController@destroyImage']);

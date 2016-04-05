@@ -2881,7 +2881,7 @@
                 <img src="{{$logoMain or Null}}">
                 <p class="lead pull-right" style="text-align:right; margin-bottom:-10px;">Код заказа: <strong>{{$orderCode}}</strong><br>
                 <small style="font-size: 70%">По данному коду, Вы сможете
-                <a style="color:white;" href="{{URL::to('/check/'.$orderCode)}}">отслеживать заказ</a>.
+                <a style="color:white;" href="{!! $appURL.'/check/'.$orderCode !!}">отслеживать заказ</a>.
                 </small>
                 </p>
             </div>
@@ -2896,7 +2896,7 @@
                             Благодарим Вас за оплату заказа! Ваш заказ будет выполнен так быстро, как это только возможно!
                         </div>
                         <p>
-                        Проверить статус платежа возможно на <a href="{{URL::to('/check/'.$orderCode)}}">странице заказа</a>. Так же, после его отправки Вы получите письмо с номером ТТН.
+                        Проверить статус платежа возможно на <a href="{!! $appURL.'/check/'.$orderCode !!}">странице заказа</a>. Так же, после его отправки Вы получите письмо с номером ТТН.
                         </p>
                     </div>
                 </div>

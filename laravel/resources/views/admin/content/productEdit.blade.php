@@ -54,6 +54,19 @@
                                 </div>
                             </div>
 
+
+                            <div class="form-group">
+                                <label for="inputPassword4" class="col-sm-3 control-label">Опции цен</label>
+                                <div class="col-md-9">
+                                    {!! Form::select('opts[]', $opt_arr, $myopt_arr, array('class'=>'form-control input-sm select2', 'style'=>'width: 100%', 'multiple'=>'multiple')) !!}
+
+                                </div>
+                            </div>
+
+
+
+
+
                             <div class="form-group @if ($errors->has('urlhash')) has-error @endif">
                                 {!! Form::label('urlhash', 'URL-имя', array('class'=>'col-sm-3 control-label')) !!}
                                 <div class="col-sm-9">

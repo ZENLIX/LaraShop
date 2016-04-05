@@ -16,6 +16,7 @@ use larashop\Purchase;
 use larashop\Clients;
 use larashop\OrderItems;
 use larashop\Comments;
+use larashop\Options;
 use Sitemap;
 use Cart;
 use URL;
@@ -180,8 +181,32 @@ class HomeController extends Controller
             } 
             else {
                 
+
+                    if (strpos($value->product_id, '0000') ) {
+                        //dd('consist');
+                        $pID=explode('0000', $value->product_id);
+                        $option=Options::findOrFail($pID[1]);
+                        $product=Products::findOrFail($pID[0]);
+                        $productPrice= $option->price;
+                        $value->productPrice = $productPrice;
+                        $value->productName = $product->name . ' (' . $option->name . ')' ;
+                        $value->productCover = $product->cover;
+                        $value->productUrlhash = $product->urlhash;
+
+                    }
+                    else {
+                        $productPrice = $value->product->price;
+                        $value->productPrice = $value->product->price;
+                        $value->productName = $value->product->name;
+                        $value->productCover = $value->product->cover;
+                        $value->productUrlhash = $value->product->urlhash;
+                    }
+
+
+
+
                 //echo   $value->qty."__";
-                $totalSumm = $totalSumm + ($value->product->price * $value->qty);
+                $totalSumm = $totalSumm + ($value->productPrice * $value->qty);
             }
         }
         

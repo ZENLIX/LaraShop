@@ -23,6 +23,14 @@ class Products extends Model
     return $this->belongsToMany('larashop\recommendsProducts', 'recommendsProducts', 'product_id', 'product_id_recommend');
 }
 
+
+    public function productOptions() // those who follow me
+{
+        //$this->belongsToMany('App\Role', 'user_roles', 'user_id', 'role_id');
+    return $this->belongsToMany('larashop\Options', 'product_options', 'product_id', 'option_id');
+}
+
+
         public function category()
   {
     return $this->hasOne('larashop\Categories', 'id', 'categories_id');

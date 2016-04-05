@@ -191,6 +191,15 @@
                                         {!! Form::select('item', $Prods, Null, array('class'=>'form-control input-sm select2', 'style'=>'width: 100%')) !!}
                                     </div>
                                 </div>
+
+                                <div class="form-group">
+                                    <label for="inputPassword4" class="col-sm-2 control-label">Опции</label>
+                                    <div class="col-md-10">
+                                        {!! Form::select('options', $Options, Null, array('class'=>'form-control input-sm select2', 'style'=>'width: 100%')) !!}
+                                    </div>
+                                </div>
+
+
                                 <div class="form-group @if ($errors->has('qty')) has-error @endif">
                                     {!! Form::label('qty', 'К-во', array('class'=>'col-sm-2 control-label')) !!}
                                     <div class="col-sm-10">

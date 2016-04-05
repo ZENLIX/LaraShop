@@ -19,15 +19,52 @@
           @if ($product->price_old)
           <del><span class="amount">{{$product->price_old}} грн</span></del>
           @endif
-          <span class="amount label label-warning">{{$product->price}} грн</span></p>
+          <span class="amount label label-warning"><span id="priceUI">
+          @if ($product->productOptions->count() > 0)
+          {{$product->productOptions()->first()->price }}
+          @else
+          {{$product->price}}
+          @endif
+
+          </span> грн</span></p>
           <p>{!! nl2br ($product->description) !!}</p>
           <div class="">
             <div class="">
               <div class="col-md-12">
                 @if ($product->isset == 'true')
-                <center>
+                <center class="form-horizontal">
+<div class="form-group ">
+
+@if ($product->productOptions->count() > 0)
+
+<label class="control-label col-md-3">Опции</label>
+<div class="col-md-3">
+
+                  
+                  <select class="form-control text-left" id="optSelUI">
+                  @foreach ($product->productOptions as $option)
+                    <option value="{{$option->id}}" data-price="{{$option->price}}">{{$option->name}}</option>
+                  @endforeach
+                    
+                  </select>
+
+</div>
+@else 
+<div class="col-md-6"></div>
+@endif
+
+
+<div class="col-md-6">
                 <a id="pay" class="btn btn-pay2 btn-lg" href="#" role="button" data-id="{{$product->id}}"><i class="fa fa-shopping-cart"></i> В корзину</a>
+</div>
+</div>
+
+
+
                 </center>
+
+
+
                 @else
                 В данный момент товара нет в наличии
                 @endif
@@ -176,5 +213,18 @@
     var hash = window.location.hash;
     // do some validation on the hash here
     hash && $('ul.nav a[href="' + hash + '"]').tab('show');
+
+
+//optSelUI
+//priceUI
+
+$('#optSelUI').on('change', function() {
+  $("#priceUI").text($(this).find(':selected').attr('data-price'));
+  //console.log($(this).find(':selected').attr('data-price'));
+});
+
+
+
+
 });
 </script>

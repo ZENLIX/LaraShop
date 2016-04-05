@@ -12,6 +12,7 @@ use larashop\Info;
 use larashop\Gallery;
 use larashop\Purchase;
 use larashop\Comments;
+use larashop\Options;
 use Image;
 use File;
 use Hash;
@@ -34,6 +35,102 @@ class ContentController extends Controller
         
     }
     
+
+
+
+public function indexOptions() {
+
+        $options = Options::all();
+        
+        $data = ['options' => $options,
+        'NewOrderCounter' => Purchase::Neworders()->count() ];
+        
+        return view('admin.content.options')->with($data);
+
+
+}
+
+
+public function createOptions() {
+
+    $data = [
+        'NewOrderCounter' => Purchase::Neworders()->count() ];
+return view('admin.content.optionsCreate')->with($data);
+}
+
+
+public function storeOptions(Request $request) {
+        $validator = Validator::make($request->all() , ['name' => 'required|min:2|max:255', 'price' => 'required']);
+        
+        if ($validator->fails()) {
+            
+            return back()->withErrors($validator)->withInput();
+        } 
+        else {
+
+
+Options::create([
+
+'name'=>$request->name,
+'price'=>$request->price
+
+    ]);
+            $request->session()->flash('alert-success', 'Опция успешно создана!');
+            return redirect('content/options');
+
+        }
+}
+
+
+public function editOptions($id) {
+
+
+$option=Options::findOrFail($id);
+
+    $data = ['option'=>$option,
+        'NewOrderCounter' => Purchase::Neworders()->count() ];
+return view('admin.content.optionsEdit')->with($data);
+
+}
+
+
+public function updateOptions(Request $request, $id) {
+
+$option=Options::findOrFail($id);
+        $validator = Validator::make($request->all() , ['name' => 'required|min:2|max:255', 'price' => 'required']);
+        
+        if ($validator->fails()) {
+            
+            return back()->withErrors($validator)->withInput();
+        } 
+        else {
+$option->update([
+
+'name'=>$request->name,
+'price'=>$request->price
+
+    ]);
+
+            $request->session()->flash('alert-success', 'Опция успешно сохранена!');
+            return redirect('content/options');
+
+}
+
+
+}
+
+
+public function destroyOptions($id) {
+$option=Options::findOrFail($id);
+
+$option->delete();
+
+}
+
+
+
+
+
     public function indexCat() {
         
         //
@@ -198,6 +295,15 @@ class ContentController extends Controller
         //
         $cats = Categories::orderBy('sort_id', 'asc')->get();
         $prods = Products::orderBy('sort_id', 'asc')->get();
+
+        $options=Options::all();
+        $opt_arr = [];
+        foreach ($options as $key => $value) {
+            $opt_arr[$value->id] = $value->name;
+        }
+
+
+
         $cats_arr = [];
         foreach ($cats as $key => $value) {
             $cats_arr[$value->id] = $value->name;
@@ -208,7 +314,8 @@ class ContentController extends Controller
         }
         
         //dd($prods_arr);
-        $data = ['CatList' => $cats_arr, 'Prods' => $prods_arr, 'NewOrderCounter' => Purchase::Neworders()->count() ];
+        $data = ['CatList' => $cats_arr, 'Prods' => $prods_arr, 'NewOrderCounter' => Purchase::Neworders()->count(),
+        'opt_arr'=>$opt_arr ];
         return view('admin.content.productCreate')->with($data);
     }
     
@@ -275,6 +382,10 @@ class ContentController extends Controller
             
             $product = Products::create($arr);
             $product->recommendProds()->attach($request->related);
+            $product->productOptions()->attach($request->opts);
+
+
+            
             $request->session()->flash('alert-success', 'Продукт успешно создан!');
             return redirect('content/prod');
         }
@@ -300,6 +411,24 @@ class ContentController extends Controller
         
         //
         $product = Products::findOrFail($id);
+
+        $options=Options::all();
+        $opt_arr = [];
+        foreach ($options as $key => $value) {
+            $opt_arr[$value->id] = $value->name;
+        }
+
+
+        $myopt = $product->productOptions;
+        //dd($myopt->pivot->option_id);
+        $myopt_arr = [];
+        foreach ($myopt as $key => $value) {
+            
+            //$myprods_arr[] = $value->id;
+            array_push($myopt_arr, $value->pivot->option_id);
+        }
+
+
         
         //dd($product->recommendProd);
         
@@ -326,12 +455,23 @@ class ContentController extends Controller
         ($product->isset == 'false') ? $product->isset = Null : $product->isset;
         
         //dd($product->isset);
-        $data = ['CatList' => $cats_arr, 'Prods' => $prods_arr, 'myProds' => $myprods_arr, 'product' => $product, 'NewOrderCounter' => Purchase::Neworders()->count() ];
+        $data = ['CatList' => $cats_arr, 'Prods' => $prods_arr, 'myProds' => $myprods_arr, 'product' => $product, 'NewOrderCounter' => Purchase::Neworders()->count(),
+
+'opt_arr'=>$opt_arr,
+'myopt_arr'=>$myopt_arr
+
+
+];
         
         return view('admin.content.productEdit')->with($data);
     }
     
     public function updateProduct(Request $request, $id) {
+
+
+
+
+
         $product = Products::findOrFail($id);
         
         $cover = $request->file('cover');
@@ -399,6 +539,10 @@ class ContentController extends Controller
             
             $product->recommendProds()->detach();
             $product->recommendProds()->attach($request->related);
+
+            $product->productOptions()->detach();
+            $product->productOptions()->attach($request->opts);
+
             
             $request->session()->flash('alert-success', 'Продукт успешно отредактирован!');
             return redirect('content/prod');

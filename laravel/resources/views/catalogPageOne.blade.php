@@ -96,7 +96,18 @@
 
 
                             @if ($product->isset == "true")
-                            <a id="pay" style="  color: #FF5566;  " class="btn btn-default btn-xs" href="#"  data-id="{{$product->id}}"><i class="fa fa-shopping-cart"></i> Купить <small class="text-muted ">({{$product->price}} грн)</small></a>
+                            <a id="pay" style="  color: #FF5566;  " class="btn btn-default btn-xs" href="#"  data-id="{{$product->id}}"><i class="fa fa-shopping-cart"></i> Купить <small class="text-muted ">(
+
+
+        @if ($product->productOptions->count() > 0)
+          {{$product->productOptions()->first()->price }}
+          @else
+          {{$product->price}}
+          @endif
+
+
+
+                             грн)</small></a>
                             @else
                             <small>Нет в наличии</small>
                             @endif

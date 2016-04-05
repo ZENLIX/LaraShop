@@ -21,6 +21,8 @@
                 <ul class="treeview-menu ">
                     <li {!! Request::is('content/cat') ? ' class="active"' : null !!} ><a href="{!! URL::to('content/cat') !!}"><i class="fa fa-circle-o"></i> <span>Категории</span></a></li>
                     <li {!! Request::is('content/prod') ? ' class="active"' : null !!} ><a href="{!! URL::to('content/prod') !!}"><i class="fa fa-circle-o"></i> <span>Товары</span> </a></li>
+                    <li {!! Request::is('content/options') ? ' class="active"' : null !!} ><a href="{!! URL::to('content/options') !!}"><i class="fa fa-circle-o"></i> <span>Опции товаров</span> </a></li>
+
                     <li {!! Request::is('content/comments') ? ' class="active"' : null !!} ><a href="{!! URL::to('content/comments') !!}"><i class="fa fa-circle-o"></i> <span>Комментарии</span> </a></li>
                     <li {!! Request::is('ticket/list/*') ? ' class="active"' : null !!} ><a href="{!! URL::to('content/gallery') !!}"><i class="fa fa-circle-o"></i> <span>Галерея</span> </a></li>
                     <li {!! Request::is('ticket/list/*') ? ' class="active"' : null !!} ><a href="{!! URL::to('content/info') !!}"><i class="fa fa-circle-o"></i> <span>Информация</span> </a></li>

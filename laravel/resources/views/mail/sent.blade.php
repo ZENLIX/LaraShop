@@ -2881,7 +2881,7 @@
                 <img src="{{$logoMain or Null}}">
                 <p class="lead pull-right" style="text-align:right; margin-bottom:-10px;">Код заказа: <strong>{{$orderCode}}</strong><br>
                 <small style="font-size: 70%">По данному коду, Вы сможете
-                <a style="color:white;" href="{{URL::to('/check/'.$orderCode)}}">отслеживать заказ</a>.
+                <a style="color:white;" href="{!! $appURL.'/check/'.$orderCode !!}">отслеживать заказ</a>.
                 </small>
                 </p>
             </div>

@@ -8,6 +8,7 @@ use larashop\Http\Controllers\Controller;
 use Cart;
 use larashop\Products;
 use Setting;
+use larashop\Options;
 
 class BasketController extends Controller
 {
@@ -130,9 +131,19 @@ class BasketController extends Controller
     public function storeProduct(Request $request, $id) {
         
         //
-        
+        //dd($request->opt);
         $product = Products::findOrFail($id);
         
+
+
+if ($request->opt != "Null") {
+    $option=Options::findOrFail($request->opt);
+    $product->name = $product->name . " (" . $option->name . ") ";
+    $product->price = $option->price;
+    $product->id = $product->id . "0000" . $option->id;
+
+}
+
         //Cart::add('293ad', 'Product 1', 1, 9.99, array('size' => 'large'));
         
         //dd($prod_arr);

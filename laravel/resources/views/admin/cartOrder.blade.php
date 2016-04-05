@@ -53,9 +53,9 @@ padding: 5px;}
             <tr id="tr_">
 
                 <td style=" vertical-align: inherit; "><center><small>{{$i}}</small></center></td>
-                <td style=" vertical-align: inherit; "><small>{{$row->product['name']}}</small></td>
+                <td style=" vertical-align: inherit; "><small>{{$row->productName}}</small></td>
                 <td style=" vertical-align: inherit; "><input id="demo" class="input-sm" type="text" value="{{$row->qty}}" data-id="{{$row->id}}"></td>
-                <td id="price_" name="cost" val="" style=" vertical-align: inherit; "><center><small>{!! ($row->product->price*$row->qty) !!}</small></center></td>
+                <td id="price_" name="cost" val="" style=" vertical-align: inherit; "><center><small>{!! ($row->productPrice*$row->qty) !!}</small></center></td>
                 <td style=" vertical-align: inherit; "><button id="remove_item" data-id="{{$row->id}}" type="button" class="btn btn-danger btn-xs"><i class="fa fa-trash-o"></i></button></td>
             </tr>
             @endif
