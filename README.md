@@ -4,12 +4,18 @@ LaraShop is a simple SHOP CMS based on Laravel framework.
 Temporarily available at russian language, in planned english.
 
 <h4>Screenshots</h4>
-![Image](https://raw.githubusercontent.com/ZENLIX/larashop/master/gitimgs/dashboard.png)
-![Image](https://raw.githubusercontent.com/ZENLIX/larashop/master/gitimgs/order.png)
-![Image](https://raw.githubusercontent.com/ZENLIX/larashop/master/gitimgs/product.png)
-![Image](https://raw.githubusercontent.com/ZENLIX/larashop/master/gitimgs/productPage.png)
-![Image](https://raw.githubusercontent.com/ZENLIX/larashop/master/gitimgs/purchase.png)
-![Image](https://raw.githubusercontent.com/ZENLIX/larashop/master/gitimgs/cart.png)
+
+![image](https://raw.githubusercontent.com/ZENLIX/larashop/master/gitimgs/dashboard.png)
+
+![image](https://raw.githubusercontent.com/ZENLIX/larashop/master/gitimgs/order.png)
+
+![image](https://raw.githubusercontent.com/ZENLIX/larashop/master/gitimgs/product.png)
+
+![image](https://raw.githubusercontent.com/ZENLIX/larashop/master/gitimgs/productPage.png)
+
+![image](https://raw.githubusercontent.com/ZENLIX/larashop/master/gitimgs/purchase.png)
+
+![image](https://raw.githubusercontent.com/ZENLIX/larashop/master/gitimgs/cart.png)
 
 
 <h4>Features</h4>
